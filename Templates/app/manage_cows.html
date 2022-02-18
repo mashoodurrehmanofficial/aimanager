@@ -1,0 +1,109 @@
+{% extends 'partials/layout.html' %}
+<style>
+  @media screen and (max-width: 820px) {
+    table {
+      display:block; 
+      overflow-y: scroll; 
+  }
+  }
+</style>
+
+{% block 'mainlayout' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<section id="basic-datatable">
+  <div class="row">
+    <div class="col-12">
+      <div class="card" style="padding:0px 2%">
+        <div class="card-header border-bottom p-1">
+          <div class="head-label">
+            <h6 class="mb-0">Cow Listing</h6>
+          </div>
+          <div class="dt-action-buttons text-end">
+            <div class="dt-buttons d-inline-flex">
+              <a type="button" class="btn btn-primary" href="/manage_properties/edit_property/{{required_property.id}}/manage_cows/add_cow">
+                Add new Cow
+              </a>
+            </div>
+          </div>
+        </div>
+        <table id="customer_lising_table" class="table display dataTables_wrapper dt-bootstrap5 no-footer"
+          style="width:100%; " cellspacing="0">
+
+
+
+
+          <thead>
+            <tr class=" ">
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox2</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">NLSID</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">VID</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Weight</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Breed</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1"> Manage Cows </th>
+            </tr>
+          </thead>
+
+
+          <tbody>
+            {% for cow in all_cows %}
+
+            <tr>
+              <td> {{cow.id}} </td> 
+              <td> {{cow.id}} </td> 
+              <td> <a href="/manage_properties/edit_property/{{required_property.id}}/manage_cows/edit_cow/{{cow.id}}"> {{cow.nlsid}} </a> </td>
+              <td> <a href="/manage_properties/edit_property/{{required_property.id}}/manage_cows/edit_cow/{{cow.id}}"> {{cow.vid}} </a> </td>
+              <td> {{cow.weight}} </td>
+              <td>  {{cow.breed}}  </td> 
+              
+              
+               
+              <td> 
+                <a href="/manage_properties/edit_property/{{required_property.id}}/manage_cows/edit_cow/{{cow.id}}"> 
+                  <button type="button" class="btn btn-primary waves-effect"> <i data-feather='external-link'></i> <span>Manage</span> </button> 
+                </a>
+              </td>
+
+              
+               
+                
+              
+
+
+
+
+            </tr>
+            {% endfor %}
+
+
+
+
+
+          </tbody>
+        </table>
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+</script>
+
+<!-- Code injected by live-server -->
+
+{% endblock 'mainlayout' %}

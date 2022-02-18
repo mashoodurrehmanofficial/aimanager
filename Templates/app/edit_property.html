@@ -1,0 +1,103 @@
+{% extends 'partials/layout.html' %}
+{% block 'mainlayout' %}
+
+  
+<section id="multiple-column-form">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header border-bottom p-1 mb-1">
+                    <div class="head-label">
+                      <h6 class="mb-0">
+                        {% if required_property %}
+                        Edit Property
+                        {% else %}
+                        Add Property
+
+                        {% endif %}
+                      </h6>
+                    </div>
+                    
+                    {% if required_property %}
+                        
+                    <div class="dt-action-buttons text-end">
+                      <div class="dt-buttons d-inline-flex"> 
+                        <a type="button" class="btn btn-primary" href="/manage_properties/edit_property/{{required_property.id}}/manage_cows">
+                          Manage Cows
+                        </a>
+                      </div>
+                    </div>
+                    {% else %}
+                        
+                    {% endif %}
+                        
+
+
+
+                  </div>
+
+
+                
+                <div class="card-body">
+                    <form class="form"   method="post"> {% csrf_token %}
+                        <div class="row">
+ 
+                            <div class="col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="property_name">Property Name</label>
+                                    <input type="text" id="property_name" class="form-control"  placeholder="Property Name" name="property_name" value="{{required_property.name}}">
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="property_pic">Property Identification Code</label>
+                                    <input type="text" id="property_pic" class="form-control" placeholder="Property PIC" name="property_pic"  value="{{required_property.pic}}">
+                                </div>
+                            </div> 
+
+                            <div class="col-md-12 mb-1">
+                                <label class="form-label" for="property_state">Customer / Owner</label>
+                                <select class="select2 form-select" id="property_state" disabled>
+                                    {% comment %} <option value='Select Customer' selected> Select Customer / Owner </option>  {% endcomment %}
+                                    {% for customer in avaliable_customers %}
+                                         
+                                    {% if required_customer.property.id == customer.property_id %}
+                                        <option value="{{customer.name}}" selected>{{customer.name}}</option> 
+                                    {% else %}
+                                        <option value="{{customer.name}}">{{customer.name}}</option> 
+                                    {% endif %} 
+
+                                    {% endfor %}
+                                </select>
+                            </div>
+ 
+ 
+
+                            <div class="col-12">
+                                <button type="submit"
+                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save</button>
+                                <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
+                            </div>
+
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% block 'jsblock' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script>  
+
+</script>
+{% endblock 'jsblock' %}
+
+{% endblock 'mainlayout' %}

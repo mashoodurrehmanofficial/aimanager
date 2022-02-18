@@ -1,0 +1,167 @@
+{% extends 'partials/layout.html' %}
+{% block 'mainlayout' %}
+
+
+<section id="multiple-column-form">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"> 
+                        {% if required_ai_program %}
+                        Edit AI Program
+                        {% else %}
+                        Add AI Program 
+                        {% endif %}
+
+
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form class="form"   method="post"> {% csrf_token %}
+                        <div class="row">
+
+
+                            <div class="col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="customer_id">Customer ID</label>
+                                    <input type="text" id="customer_id" class="form-control"  placeholder="Customer ID" name="customer_id" value="{{required_customer.id}}" readonly>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="customer_email">Customer Email</label>
+                                    <input type="text" id="customer_email" class="form-control"  placeholder="Customer Email" name="customer_email" value="{{required_customer.email}}" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="property_name">Property Name</label>
+                                    <input type="text" id="property_name" class="form-control"  placeholder="Property Name" name="property_name" value="{{required_property.name}}" readonly>
+                                </div>
+                            </div>
+
+                                    
+
+                            <div class="col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="customer_mobile">Customer Mobile</label>
+                                    <input type="text" id="customer_mobile" class="form-control"  placeholder="Customer Mobile" name="customer_mobile" value="{{required_customer.mobile_number}}" readonly>
+                                </div>
+                            </div>
+
+                         
+
+                            <div class="col-md-12 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="proposed_start">Proposed Start</label> 
+                                   
+                                    <input name='proposed_start' id='proposed_start' type="text" id="proposed_start" class="form-control flatpickr-basic flatpickr-input active" placeholder="YYYY-MM-DD" readonly="readonly" value="{{required_ai_program.start_date}}">
+                                
+                                </div>
+                            </div>
+  
+                            <div class="col-md-12 col-12 mb-1"> 
+                                <ul class="list-group">
+
+                                    {% for event in predicted_dates_data %}
+                                    <input class="text status_hidden_container" type="hidden" data-status_hidden_container="{{event.id}}"  name="{{event.id}}_status">
+                                    
+                                    <li class="list-group-item d-flex align-items-center"> 
+                                        <div class="form-check form-check-inline"> 
+                                            {% if event.status %}
+                                            <input class="form-check-input ai_prgram_step_status" type="checkbox" id="{{event.id}}"  name="{{event.id}}_status" checked>
+                                            {% else %}
+                                            <input class="form-check-input ai_prgram_step_status" type="checkbox" id="{{event.id}}"  name="{{event.id}}_status">
+                                            {% endif %} 
+                                        <label class="form-check-label" for="{{event.id}}">Day {{event.day}} :  {{event.display_name}}</label>
+                                    </div>
+                                    <span class="ms-auto"  id="{{event.id}}">{{event.date}}</span>
+                                </li> 
+                                {% endfor %} 
+                                </ul>
+                            </div>
+
+
+                            
+                            {% if required_ai_program %}
+                                
+                                <div class="col-md-12 col-12 mb-2 mt-1"> 
+                                    <div class="form-check form-check-inline">
+                                        <input class="text status_hidden_container " type="hidden" data-status_hidden_container="program_finished"  name="program_finished">
+                                        {% if required_ai_program.finished %}
+                                        <input class="form-check-input ai_prgram_step_status" type="checkbox" name="program_finished" id="program_finished"   checked>
+                                        {% else %}
+                                        <input class="form-check-input ai_prgram_step_status" type="checkbox" name="program_finished" id="program_finished"  >
+                                        {% endif %} 
+                                        <label class="form-check-label" for="program_finished">Mark Program Finished</label>
+                                    </div>
+                                </div>
+                            {% else %}
+                                
+                            {% endif %}
+                                
+
+
+
+ 
+                            <div class="col-12">
+                                <button type="submit"
+                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save</button>
+                                <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
+                            </div>
+
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+{% block 'jsblock' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script>  
+
+$('.ai_prgram_step_status').change(function(){
+    var required_id = $(this).attr('id');
+    var checked_status = $(this).is(':checked') 
+    //var required_status_hidden_container = $("input").find(`[data-status_hidden_container='seeder']`)
+    var all_inputs = $('input.status_hidden_container')
+    //var required_status_hidden_container = $("input").find(`[data-status_hidden_container='seeder']`)
+    for(var x=0;x<all_inputs.length;x++){
+        var required_status_hidden_container = $(all_inputs[x]).attr('data-status_hidden_container')
+        if(required_status_hidden_container==required_id){
+            $(all_inputs[x]).val(checked_status)
+        }
+
+    }
+
+})
+
+$("#proposed_start").change(function(){ 
+    $.ajax({
+        url: '/ajaxgenerateAIProgramDateListing',
+        data: {'start_date': $(this).val()},
+        success: function(res){
+            var predicted_dates_data = res.predicted_dates_data
+            for(var x=0;x<predicted_dates_data.length;x++){
+                var required_span_element = $(`span#${predicted_dates_data[x].id}`)
+                required_span_element.html(predicted_dates_data[x].date)
+                console.log(required_span_element)
+            } 
+        }
+    })
+})
+</script>
+{% endblock 'jsblock' %}
+
+{% endblock 'mainlayout' %}

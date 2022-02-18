@@ -1,0 +1,208 @@
+{% extends 'partials/layout.html' %}
+<style>
+  @media screen and (max-width: 820px) {
+    table {
+      display:block; 
+      overflow-y: scroll; 
+  }
+  }
+</style>
+
+{% block 'mainlayout' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<section id="basic-datatable">
+  <div class="row">
+    <div class="col-12">
+      <div class="card" style="padding:0px 2%">
+        <div class="card-header border-bottom p-1">
+          <div class="head-label">
+            <h6 class="mb-0">Customer Listing</h6>
+          </div>
+          <div class="dt-action-buttons text-end">
+            <div class="dt-buttons d-inline-flex">
+              <a type="button" class="btn btn-primary" href="/add_customer">
+                Add new Member
+              </a>
+            </div>
+          </div>
+        </div>
+        <table id="customer_lising_table" class="table display dataTables_wrapper dt-bootstrap5 no-footer"
+          style="width:100%; " cellspacing="0">
+
+
+
+
+          <thead>
+            <tr class=" ">
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox2</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Name</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Email</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Mobile</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Property</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">AI Program
+              </th>
+            </tr>
+          </thead>
+
+
+          <tbody>
+            {% for customer in all_customers %}
+
+            <tr>
+              <td> {{customer.id}} </td> 
+              <td> {{customer.id}} </td> 
+              <td> <a href="/edit_customer/{{customer.id}}"> {{customer.name}} </a> </td>
+              <td> <a href="/edit_customer/{{customer.id}}"> {{customer.email}} </a> </td>
+              <td> <a href="/edit_customer/{{customer.id}}"> {{customer.mobile_number}} </a> </td> 
+              <td> {{customer.property.pic}} </td>
+              {% comment %} <td> {{customer.ai_program.start_date}} </td> {% endcomment %}
+              <td> <button type="button" class="btn btn-outline-primary waves-effect"> <i
+                    data-feather='external-link'></i> <span>Manage</span> </button> </td>
+            </tr>
+            {% endfor %}
+
+
+
+
+
+          </tbody>
+        </table>
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    $('#customer_lising_table').DataTable({
+      displayLength: 10,
+      lengthMenu: [2, 7, 10, 25, 50, 75, 100],
+
+      'columnDefs': [
+      {
+        className: "control",
+        orderable: !1,
+        responsivePriority: 2,
+        targets: 0
+      }, {
+        targets: 1,
+        orderable: !1,
+        responsivePriority: 3,
+        render: function (e, t, a, s) {
+          return '<div class="form-check"> <input class="form-check-input dt-checkboxes" type="checkbox" value="" id="checkbox' + e + '" /><label class="form-check-label" for="checkbox' + e + '"></label></div>'
+        },
+        checkboxes: {
+          selectAllRender: '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>'
+        }
+      },
+      
+      
+      ],
+
+      'select': {
+        'style': 'multi'
+      },
+      'order': [
+        [1, 'asc']
+      ],
+
+
+
+
+      buttons: [{
+        text: feather.icons['plus'].toSvg({
+          class: 'me-50 font-small-4'
+        }) + 'Add New Record',
+        className: 'create-new btn btn-primary',
+        attr: {
+          'data-bs-toggle': 'modal',
+          'data-bs-target': '#modals-slide-in',
+          'href': '/'
+        },
+        href: '/',
+        init: function (api, node, config) {
+          $(node).removeClass('btn-secondary');
+        }
+      }],
+      responsive: {
+        details: {
+          display: $.fn.dataTable.Responsive.display.modal({
+            header: function (row) {
+              var data = row.data();
+              return 'Details of ' + data['full_name'];
+            }
+          }),
+          type: 'column',
+          renderer: function (api, rowIdx, columns) {
+            var data = $.map(columns, function (col, i) {
+              return col.title !==
+                '' // ? Do not show row in modal popup if title is blank (for check box)
+                ?
+                '<tr data-dt-row="' +
+                col.rowIdx +
+                '" data-dt-column="' +
+                col.columnIndex +
+                '">' +
+                '<td>' +
+                col.title +
+                ':' +
+                '</td> ' +
+                '<td>' +
+                col.data +
+                '</td>' +
+                '</tr>' :
+                '';
+            }).join('');
+
+            return data ? $('<table class="table"/>').append('<tbody>' + data + '</tbody>') : false;
+          }
+        }
+      },
+      language: {
+        paginate: {
+          // remove previous & next text from pagination
+          previous: '&nbsp;',
+          next: '&nbsp;'
+        }
+      },
+    });
+
+    $('#frm-example').on('submit', function (e) {
+      var form = this;
+
+      var rows_selected = table.column(0).checkboxes.selected();
+
+      // Iterate over all selected checkboxes
+      $.each(rows_selected, function (index, rowId) {
+        // Create a hidden element
+        $(form).append(
+          $('<input>')
+          .attr('type', 'hidden')
+          .attr('name', 'id[]')
+          .val(rowId)
+        );
+      });
+    });
+
+  });
+</script>
+
+<!-- Code injected by live-server -->
+
+{% endblock 'mainlayout' %}

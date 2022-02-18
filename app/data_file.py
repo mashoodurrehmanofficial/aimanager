@@ -1,0 +1,4 @@
+AVAILABLE_STATES = ['TAS', 'NSW', 'VIC', 'QLD',  'NT', 'SA', 'WA']
+
+
+AVAILABLE_INTERACTIONS = ['TAS', 'NSW', 'VIC', 'QLD',  'NT', 'SA', 'WA']

@@ -1,0 +1,127 @@
+{% extends 'partials/layout.html' %}
+<style>
+  @media screen and (max-width: 820px) {
+    table {
+      display:block; 
+      overflow-y: scroll; 
+  }
+  }
+</style>
+
+{% block 'mainlayout' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<section id="basic-datatable">
+  <div class="row">
+    <div class="col-12">
+      <div class="card" style="padding:0px 2%">
+        <div class="card-header border-bottom p-1">
+          <div class="head-label">
+            <h6 class="mb-0">Customer Listing</h6>
+          </div>
+          
+          <div class="dt-action-buttons text-end">
+            <div class="dt-buttons d-inline-flex">
+              <a type="button" class="btn btn-primary" href="/manage_customers/add_customer">
+                Add new Customer
+              </a>
+            </div>
+          </div>
+        </div>
+        <table id="customer_lising_table" class="table display dataTables_wrapper dt-bootstrap5 no-footer"
+          style="width:100%; " cellspacing="0">
+
+
+
+
+          <thead>
+            <tr class=" ">
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox </th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox2</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Name</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Email</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Mobile</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Property</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">AI Program </th>
+            </tr>
+          </thead>
+
+
+          <tbody>
+            {% for customer in all_customers %}
+
+            <tr>
+              <td> {{customer.id}} </td> 
+              <td> {{customer.id}} </td> 
+              <td> <a href="/manage_customers/edit_customer/{{customer.id}}"> {{customer.name}} </a> </td>
+              <td> {{customer.email}} </td>
+              <td>  {{customer.mobile_number}} </td> 
+              
+              
+              <td>
+                
+                {% if customer.property.pic %}
+                {{customer.property.pic}}
+                {% else %}
+                    <span class="badge rounded-pill badge-glow bg-secondary">+ Add Property</span>
+                {% endif %}
+                   
+              
+                </td>
+
+              
+              {% if customer.enrolled_program %}
+                    <td> 
+                      <a href='/manage_customers/edit_customer/{{customer.id}}/edit_ai_program/{{customer.enrolled_program.id}}'>
+                        <button type="button" class="btn btn-primary waves-effect"> <i data-feather='external-link'></i> <span>Manage</span> </button> 
+                      </a>
+                      
+                    </td>
+                  
+                  {% else %}
+                    <td> 
+                        <a href='/manage_customers/edit_customer/{{customer.id}}/add_ai_program'>
+                          <button type="button" class="btn btn-outline-primary waves-effect"> <i data-feather='external-link'></i> <span>Manage</span> </button> 
+                        </a>
+                    </td>
+              {% endif %}
+                
+              
+
+
+
+
+            </tr>
+            {% endfor %}
+
+
+
+
+
+          </tbody>
+        </table>
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+</script>
+
+<!-- Code injected by live-server -->
+
+{% endblock 'mainlayout' %}

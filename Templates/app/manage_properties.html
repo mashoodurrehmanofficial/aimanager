@@ -1,0 +1,111 @@
+{% extends 'partials/layout.html' %}
+<style>
+  @media screen and (max-width: 820px) {
+    table {
+      display:block; 
+      overflow-y: scroll; 
+  }
+  }
+</style>
+
+{% block 'mainlayout' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<section id="basic-datatable">
+  <div class="row">
+    <div class="col-12">
+      <div class="card" style="padding:0px 2%">
+        <div class="card-header border-bottom p-1">
+          <div class="head-label">
+            <h6 class="mb-0">Property Listing</h6>
+          </div>
+          <div class="dt-action-buttons text-end">
+            <div class="dt-buttons d-inline-flex">
+              <a type="button" class="btn btn-primary" href="/manage_properties/add_property">
+                Add new Property
+              </a>
+            </div>
+          </div>
+        </div>
+        <table id="customer_lising_table" class="table display dataTables_wrapper dt-bootstrap5 no-footer"
+          style="width:100%; " cellspacing="0">
+
+
+
+
+          <thead>
+            <tr class=" ">
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox2</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Property Name</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">PIC</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Customer</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Total Cows</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1"> Manage Cows </th>
+            </tr>
+          </thead>
+
+
+          <tbody>
+            {% for property in avaialable_properties %}
+
+            <tr>
+              <td> {{property.id}} </td> 
+              <td> {{property.id}} </td> 
+              <td> <a href="/manage_properties/edit_property/{{property.id}}"> {{property.name}} </a> </td>
+              <td> <a href="/manage_properties/edit_property/{{property.id}}"> {{property.pic}} </a> </td>
+              <td> {{property.customer.name}} </td>
+              <td>  {{property.cows.count}}  </td> 
+               
+              <td>
+ 
+                <a href="/manage_properties/edit_property/{{property.id}}/manage_cows">  
+                 <button type="button" class="btn btn-primary waves-effect">
+                      <i data-feather='external-link'></i> <span>Manage</span> 
+                      
+                    </button>
+                  </a> 
+             </td>
+
+              
+               
+                
+              
+
+
+
+
+            </tr>
+            {% endfor %}
+
+
+
+
+
+          </tbody>
+        </table>
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+</script>
+
+<!-- Code injected by live-server -->
+
+{% endblock 'mainlayout' %}
