@@ -123,13 +123,14 @@ DATE_INPUT_FORMATS = ('%d-%m-%Y','%d-%m-%Y','%Y-%m-%d')
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/Static/'
-# STATIC_ROOT = '/home/PackerTracker/PackerTracker//Static2'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'Static')]
 
+# STATIC_ROOT = '/home/PackerTracker/PackerTracker//Static2'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'Static')
-]
+STATICFILES_DIRS = [  os.path.join(BASE_DIR, 'Static')]
+
+
+
 # git config --global user.email "mashoodurrehmanofficial.com".
 # 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
 MEDIA_URL = '/Media/'
