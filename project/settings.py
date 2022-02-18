@@ -126,6 +126,7 @@ STATIC_URL = '/Static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'Static')]
 
 # STATIC_ROOT = '/home/PackerTracker/PackerTracker//Static2'
+STATIC_ROOT = '/home/aimanager/aimanager/Static-django-admin'
 
 STATICFILES_DIRS = [  os.path.join(BASE_DIR, 'Static')]
 
