@@ -1,4 +1,5 @@
  
+from tracemalloc import start
 from app.views import edit_customer, edit_property
 from .models import *
 from django.contrib.auth.models import User
@@ -33,7 +34,7 @@ def context_processor(request):
             
             if 'edit_customer' in current_child_url and [x for x in ['ai_program'] if x not in current_child_url]:
                 breadcrump_paths.append({'display_name':'Edit Customer'})
-            elif 'add_customer' not in current_child_url:
+            elif 'add_customer' not in current_child_url and 'edit_customer' in current_child_url:
                 edit_customer_path = str(current_child_url).split('edit_ai_program') if 'edit_ai_program' in current_child_url else  str(current_child_url).split('add_ai_program')
                 edit_customer_path = edit_customer_path[0]
                 breadcrump_paths.append({'display_name':'Edit Customer','url':edit_customer_path})
@@ -79,22 +80,39 @@ def context_processor(request):
     
     
     
-    
-    
-    
-    print(current_child_url)
-    print(breadcrump_paths)
-    print('context') 
+
+    # print(current_child_url)
+    # print(breadcrump_paths)
+    # print('context') 
         
         
          
     for path_index,path in enumerate(breadcrump_paths):
         if 'url' in list(path.keys()): 
             breadcrump_paths[path_index]['url'] = path['url'][:-1] if str(path['url']).endswith('/') else path['url'] 
-       
-    
+        
     
     context['breadcrump_paths'] = breadcrump_paths
+    
+    
+    
+     
+    # Automatic marking AI Programs finished
+    required_ai_programs = AI_Program.objects.filter(start_date__lte=datetime.now().date())
+    required_ai_programs.update(finished=True) 
+    required_ai_programs = AI_Program.objects.filter(start_date__gt=datetime.now().date())
+    required_ai_programs.update(finished=False) 
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     return context
 
 
@@ -115,10 +133,13 @@ class CustomMiddleware(MiddlewareMixin):
         self.get_response = get_response
 
     # Code that is executed in each request before the view is called
-    # def _call_(self, request):
-    #     response = self.get_response(request)
-    #     # Code that is executed in each request after the view is called
-    #     return response
+    def _call_(self, request):
+        response = self.get_response(request)
+        
+
+        
+        # Code that is executed in each request after the view is called
+        return response
  
  
  

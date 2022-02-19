@@ -18,7 +18,7 @@
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form class="form"   method="post"> {% csrf_token %}
+                    <form class="form"   method="post" id='edit_cow_form'> {% csrf_token %}
                         <div class="row">
 
 
@@ -33,7 +33,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="cow_vid">Cow VID</label>
-                                    <input type="text" id="cow_vid" class="form-control" placeholder="Cow VID" name="cow_vid"  value="{{required_cow.vid}}" required>
+                                    <input type="text" id="cow_vid" class="form-control" placeholder="Cow VID" name="cow_vid"  value="{{required_cow.vid}}">
                                 </div>
                             </div>
 
@@ -41,13 +41,13 @@
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="cow_weight">Cow Weight</label>
-                                    <input type="text" id="cow_weight" class="form-control"  placeholder="Cow Weight" name="cow_weight"  value="{{required_cow.weight}}" required>
+                                    <input type="text" id="cow_weight" class="form-control"  placeholder="Cow Weight" name="cow_weight"  value="{{required_cow.weight}}">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="condition_score">Condition Score</label>
-                                    <input type="text" id="condition_score" class="form-control"  placeholder="Condition Score" name="condition_score"  value="{{required_cow.condition_score}}" required>
+                                    <input type="text" id="condition_score" class="form-control"  placeholder="Condition Score" name="condition_score"  value="{{required_cow.condition_score}}">
                                 </div>
                             </div>
 
@@ -56,7 +56,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="cow_imf">Cow IMF</label>
-                                    <input type="text" id="cow_imf" class="form-control" placeholder="Cow IMF"  name="cow_imf"  value="{{required_cow.imf}}" required>
+                                    <input type="text" id="cow_imf" class="form-control" placeholder="Cow IMF"  name="cow_imf"  value="{{required_cow.imf}}">
                                 </div>
                             </div>
 
@@ -66,63 +66,48 @@
                                 <div class="mb-1">
                                     <label class="form-label" for="cow_ema">Cow EMA</label>
                                     <input type="text" id="cow_ema" class="form-control"
-                                        placeholder="Cow EMA" name="cow_ema"  value="{{required_cow.ema}}" required>
+                                        placeholder="Cow EMA" name="cow_ema"  value="{{required_cow.ema}}">
                                 </div>
                             </div>
                             
                              
                             
-                            <div class="col-md-6 col-12">
-                                <div class="mb-1">
-                                    <label class="form-label" for="cow_breed">Cow Breed</label>
-                                    <input type="text" id="cow_breed" class="form-control"
-                                        placeholder="Cow Breed" name="cow_breed"  value="{{required_cow.breed}}" required>
-                                </div>
+              
+
+
+                            <div class="col-md-6 col-12 mb-1">
+                                <label class="form-label" for="cow_breed">Cow Breed</label>
+                                <select class="select2 form-select" id="cow_breed" name='cow_breed'>
+                                    <option value='' selected> Select Cow Breed </option> 
+                                    {% for breed_type in available_breed_types.0 %}
+                                  
+                                     {% if breed_type == required_cow.breed %}
+                                        <option value="{{breed_type}}" selected>{{breed_type}}</option> 
+                                    {% else %}
+                                        <option value="{{breed_type}}">{{breed_type}}</option> 
+                                    {% endif %}  
+
+                                    {% endfor %}
+                                </select> 
+
                             </div>
-                            
+
+
                             
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="cow_interaction">Cow Interaction</label>
                                     <input type="text" id="cow_interaction" class="form-control"
-                                        placeholder="Cow Interaction" name="cow_interaction"  value="{{required_cow.interaction}}" required>
+                                        placeholder="Cow Interaction" name="cow_interaction"  value="{{required_cow.interaction}}">
                                 </div>
                             </div>
                             
-
-                            {% comment %} <div class="col-md-6 mb-1">
-                                <label class="form-label" for="cow_interaction">Cow Interaction</label>
-                                <select class="select2 form-select" id="cow_interaction">
-                                    <option value='' selected> Select Cow Interaction </option> 
-                                    {% for state in available_states %}
-
-                                    {% if required_cow.property_state == state %}
-                                        <option value="{{state}}" selected>{{state}}</option> 
-                                    {% else %}
-                                        <option value="{{state}}">{{state}}</option> 
-                                    {% endif %} 
-
-                                    {% endfor %}
-                                </select>
-                            </div> {% endcomment %}
+ 
+                               
 
 
 
-                            {% comment %} <div class="col-md-6 mb-1">
-                                <label class="form-label" for="cow_interaction">Property</label>
-                                <select class="select2 form-select" id="cow_interaction">
-                                    <option value='' selected> Select Property </option> 
-                                    {% for property in avaliable_properties %}
-
-                                    {% if property.pic == required_property.pic %}
-                                        <option value="{{property.pic}}" selected>{{property}}</option> 
-                                    {% else %}
-                                        <option value="{{property.pic}}">{{property}}</option> 
-                                    {% endif %} 
-
-                                    {% endfor %}
-                                </select>
-                            </div> {% endcomment %}
+                         
 
 
 
@@ -133,7 +118,7 @@
                             <div class="col-md-12 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="cow_note">Notes</label>
-                                    <textarea type="text" id="cow_note" class="form-control"  placeholder="Notes" name="cow_note"  value="" rows="3" required >{{required_cow.note}}</textarea>
+                                    <textarea type="text" id="cow_note" class="form-control"  placeholder="Notes" name="cow_note"  value="" rows="3"  >{{required_cow.note}}</textarea>
                                 </div>
                             </div>
 
@@ -152,7 +137,7 @@
 
                             <div class="col-12">
                                 <button type="submit"
-                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save</button>
+                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Return</button>
                                 <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
                             </div>
 
@@ -171,7 +156,27 @@
 
 {% block 'jsblock' %}
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha256-yE5LLp5HSQ/z+hJeCqkz9hdjNkk1jaiGG0tDCraumnA=" crossorigin="anonymous"></script>
 <script>  
+    $(document).ready(function() {
+        $(":input").inputmask(); 
+      }) 
+      $('input[name="cow_nlsid"]').mask('AAAAAAAAAAAAAAAA'); 
+      $('input[name="condition_score"]').mask('0'); 
+ 
+
+    $('#edit_cow_form').on('submit',function(e){ 
+        var cow_nlsid = $('#cow_nlsid').val() 
+        var condition_score = parseInt($('#condition_score').val() )
+        if(cow_nlsid.length!=16 ){
+            alert("Please enter a valid Cow NLSID")
+            e.preventDefault() 
+        }   
+        else if(condition_score<1 || condition_score>7){
+            alert("Please enter a valid Condition Score [1-7]")
+            e.preventDefault() 
+        }
+    })
 
 </script>
 {% endblock 'jsblock' %}

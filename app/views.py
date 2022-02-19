@@ -1,5 +1,5 @@
 import enum
-from django.shortcuts import render,redirect,HttpResponse 
+from django.shortcuts import render,redirect,HttpResponse ,HttpResponseRedirect
 from .models import *
 from django.views.decorators.csrf import csrf_exempt 
 import os,shutil 
@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .data_file import *
+from .pdfReportGenerator import generatePdfReport
 from django.forms.models import model_to_dict
 from datetime import datetime
 # Create your views here.
@@ -45,8 +46,12 @@ def manage_customers(request):
         pass
         
     context['title'] = "Manage Customers"
+    
+    total_customers_with_enrolled_programs = len([x for x in all_customers if x['enrolled_program'] is not None])
+    print("total_customers_with_enrolled_programs = ",total_customers_with_enrolled_programs)
+    
     context['all_customers'] = all_customers 
-    print(context['all_customers'])
+    context['total_customers_with_enrolled_programs'] = total_customers_with_enrolled_programs  
     return render(request, 'app/manage_customers.html' ,context) 
 
 
@@ -116,6 +121,8 @@ def edit_cow(request,cow_id=None,property_id=None):
         print(required_property)
         required_property.cows.add(required_cow)
         print("required cow = ", required_cow.id)
+        
+        return redirect(f'/manage_properties/edit_property/{required_property.id}/manage_cows')
             
     
     
@@ -140,6 +147,9 @@ def edit_cow(request,cow_id=None,property_id=None):
      
     
     context['avaliable_properties'] = avaliable_properties 
+    context['available_breed_types']    = list(AVAILABLE_BREED_TYPES) , 
+     
+    
     return render(request, 'app/edit_cow.html' ,context) 
 
 
@@ -148,14 +158,15 @@ def edit_cow(request,cow_id=None,property_id=None):
 def generateAIProgramDateListing(record):
     
     data = [
-        {'display_name':"Seeder", 'id': 'seeder','day':0, 'date': record.seeder_injection_date,'status':record.seeder_injection_status },
-        {'display_name':"Prosto", 'id': 'prosto','day':2, 'date': record.prosto_injection_date,'status':record.prosto_injection_status },
-        {'display_name':"GNRH", 'id': 'gnrh', 'day':3, 'date': record.gnrh_date,'status':record.gnrh_status },
-        {'display_name':"Remove Seed", 'id': 'remove_seed','day':8, 'date': record.remove_seed_date,'status':record.remove_seed_status },
+        {'display_name':"CIDRS In", 'id': 'seeder','day':0, 'date': record.cidrs_in_date,'status':record.cidrs_in_status },
+        {'display_name':"PG Injection", 'id': 'bomerol','day':2, 'date': record.bomerol_injection_date,'status':record.bomerol_injection_status },
+        {'display_name':"Bomerol", 'id': 'bomerol', 'day':6, 'date': record.bomerol_date,'status':record.bomerol_status },
+        {'display_name':"CIDRS Out", 'id': 'cidrs_out','day':8, 'date': record.cidrs_out_date,'status':record.cidrs_out_status },
         {'display_name':"Insemination", 'id': 'insemination','day':10, 'date': record.insemination_date,'status':record.insemination_status }, 
+        {'display_name':"Pregnancy Test", 'id': 'pregnancy_test','day':46, 'date': record.pregnancy_test_date,'status':record.pregnancy_test_status }, 
     ]
     for index,entry in enumerate(data):
-        data[index]['date'] = datetime.strptime(str(entry['date']), "%Y-%m-%d").strftime("%d-%m-%Y") 
+        data[index]['date'] = datetime.strptime(str(entry['date']), "%Y-%m-%d").strftime("%d/%m/%Y") 
     
     return data
 
@@ -179,17 +190,19 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
         
         program_finished        = True if request.POST['program_finished']         == 'on' else False
         seeder_status           = True if request.POST['seeder_status']         == 'on' else False
-        prosto_status           = True if request.POST['prosto_status']         == 'on' else False
-        gnrh_status             = True if request.POST['gnrh_status']           == 'on' else False
-        remove_seed_status      = True if request.POST['remove_seed_status']    == 'on' else False
+        bomerol_status           = True if request.POST['bomerol_status']         == 'on' else False
+        bomerol_status             = True if request.POST['bomerol_status']           == 'on' else False
+        cidrs_out_status      = True if request.POST['cidrs_out_status']    == 'on' else False
         insemination_status     = True if request.POST['insemination_status']   == 'on' else False
+        insemination_status     = True if request.POST['insemination_status']   == 'on' else False
+        pregnancy_test_status   = True if request.POST['pregnancy_test_status']   == 'on' else False
          
         decisions = [
             proposed_start!=required_ai_program.start_date,
-            required_ai_program.seeder_injection_status != seeder_status,
-            required_ai_program.prosto_injection_status != prosto_status,
-            required_ai_program.gnrh_status != gnrh_status,
-            required_ai_program.remove_seed_status != remove_seed_status,
+            required_ai_program.cidrs_in_status != seeder_status,
+            required_ai_program.bomerol_injection_status != bomerol_status,
+            required_ai_program.bomerol_status != bomerol_status,
+            required_ai_program.cidrs_out_status != cidrs_out_status,
             required_ai_program.insemination_status != insemination_status, 
             required_ai_program.finished != program_finished, 
         ]
@@ -198,20 +211,33 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
             print("-> Send Email")
         else:
             print("-> Don't send email")
+         
         
-        print(program_finished)
-        
-        required_ai_program.start_date              = proposed_start
-        required_ai_program.seeder_injection_status = seeder_status
-        required_ai_program.prosto_injection_status = prosto_status
-        required_ai_program.gnrh_status             = gnrh_status
-        required_ai_program.remove_seed_status      = remove_seed_status
-        required_ai_program.insemination_status     = insemination_status
-        required_ai_program.finished                = program_finished
+        required_ai_program.start_date                  = proposed_start
+        required_ai_program.cidrs_in_status             = seeder_status
+        required_ai_program.bomerol_injection_status    = bomerol_status
+        required_ai_program.bomerol_status              = bomerol_status
+        required_ai_program.cidrs_out_status            = cidrs_out_status
+        required_ai_program.insemination_status         = insemination_status
+        required_ai_program.pregnancy_test_status       = pregnancy_test_status
+        required_ai_program.finished                    = program_finished
         
         required_ai_program.save()
         
         required_customer.ai_program.add(required_ai_program)
+        
+        predicted_dates_data = generateAIProgramDateListing(AI_Program.objects.get(id=int(required_ai_program.id))) 
+        
+        generatePdfReport(
+            customer_name=required_customer.name,
+            customer_email=required_customer.email,
+            customer_property_name=required_customer.property.name,
+            customer_billing_address=required_customer.billing_address,
+            dates=predicted_dates_data
+        )
+        
+        
+        return redirect(f'/manage_customers/edit_customer/{customer_id}')
         
     
     
@@ -255,7 +281,7 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
         for key,val in required_ai_program.items():
             if 'date' in key and 'status' not in key: 
                 required_ai_program[key] = str(val)
-                # required_ai_program[key] = datetime.strptime(str(val), "%Y-%m-%d").strftime("%d-%m-%Y") 
+                # required_ai_program[key] = datetime.strptime(str(val), "%Y-%m-%d").strftime("%d/%m/%Y") 
     
 
     
@@ -266,7 +292,11 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
     context['required_customer']    = required_customer
     context['required_property']    = required_property 
     context['available_customers']    = available_customers 
-    context['predicted_dates_data']    = predicted_dates_data  
+    context['predicted_dates_data']    = predicted_dates_data , 
+    
+     
+    
+    
     
     try:
         temp_ai_program.delete()
@@ -334,7 +364,10 @@ def edit_customer(request,id=None):
         
         required_customer.property = required_property
         required_customer.save() 
-     
+    
+        return redirect(f'/manage_customers')
+    
+    
     
     context = {}
     context['available_states'] = AVAILABLE_STATES 
@@ -381,6 +414,7 @@ def edit_property(request,id=None):
         required_property.pic = property_pic
         required_property.name = property_name
         required_property.save()
+        return redirect(f'/manage_properties')
     
     
     context['available_states'] = AVAILABLE_STATES  

@@ -10,7 +10,7 @@
 $(function () {
   'use strict';
 
-  var assetsPath = '/Static/app-assets/',
+  var assetsPath = '../../../app-assets/',
     statesData = {
       type: 'FeatureCollection',
       features: [

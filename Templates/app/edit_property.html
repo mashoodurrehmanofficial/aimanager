@@ -39,7 +39,7 @@
 
                 
                 <div class="card-body">
-                    <form class="form"   method="post"> {% csrf_token %}
+                    <form class="form"   method="post" id='edit_propert_form'> {% csrf_token %}
                         <div class="row">
  
                             <div class="col-md-6 col-12">
@@ -77,7 +77,7 @@
 
                             <div class="col-12">
                                 <button type="submit"
-                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save</button>
+                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Return</button>
                                 <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
                             </div>
 
@@ -95,7 +95,20 @@
 
 {% block 'jsblock' %}
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha256-yE5LLp5HSQ/z+hJeCqkz9hdjNkk1jaiGG0tDCraumnA=" crossorigin="anonymous"></script>
 <script>  
+    $(document).ready(function() {
+        $(":input").inputmask(); 
+      }) 
+      $('input[name="property_pic"]').mask('AAAAAAAA'); 
+ 
+$('#edit_propert_form').on('submit',function(e){ 
+    var property_pic = $('#property_pic').val() 
+    if(property_pic.length!=8 ){
+        alert("Please enter a valid Property Identification Code")
+        e.preventDefault() 
+    }   
+})
 
 </script>
 {% endblock 'jsblock' %}

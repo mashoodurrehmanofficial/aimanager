@@ -28,7 +28,7 @@
     {% block 'cssblock' %}{% endblock 'cssblock' %}
     {% block 'jsblock' %}{% endblock 'jsblock' %}
 
-
+ 
 
 
 
@@ -96,6 +96,8 @@
     <!-- END: Content-->
 
 
+
+
     <!-- BEGIN: Vendor JS--> 
     <!-- BEGIN Vendor JS-->
     
@@ -157,8 +159,12 @@
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
-    <script src="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/app-assets/js/core/app-menu.js"></script>
-    <script src="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/app-assets/js/core/app.js"></script>
+    {% comment %} <script src="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/app-assets/js/core/app-menu.js"></script>
+    <script src="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/app-assets/js/core/app.js"></script> {% endcomment %}
+
+
+    <script src="/Static/app-assets/js/core/app-menu.js"></script>
+    <script src="/Static/app-assets/js/core/app.js"></script>
 
 
 

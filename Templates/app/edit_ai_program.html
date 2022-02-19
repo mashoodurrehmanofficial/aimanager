@@ -1,6 +1,6 @@
 {% extends 'partials/layout.html' %}
 {% block 'mainlayout' %}
-
+  
 
 <section id="multiple-column-form">
     <div class="row">
@@ -22,12 +22,21 @@
                         <div class="row">
 
 
+                           
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
-                                    <label class="form-label" for="customer_id">Customer ID</label>
-                                    <input type="text" id="customer_id" class="form-control"  placeholder="Customer ID" name="customer_id" value="{{required_customer.id}}" readonly>
+                                    <label class="form-label" for="property_name">Property Name</label>
+                                    <input type="text" id="property_name" class="form-control"  placeholder="Property Name" name="property_name" value="{{required_property.name}}" readonly>
                                 </div>
                             </div>
+                            
+                            <div class="col-md-6 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="customer_name">Customer Name</label>
+                                    <input type="text" id="customer_name" class="form-control"  placeholder="Customer Name" name="customer_name" value="{{required_customer.name}}" readonly>
+                                </div>
+                            </div>
+
 
 
                             <div class="col-md-6 col-12">
@@ -37,13 +46,7 @@
                                 </div>
                             </div>
                             
-                            <div class="col-md-6 col-12">
-                                <div class="mb-1">
-                                    <label class="form-label" for="property_name">Property Name</label>
-                                    <input type="text" id="property_name" class="form-control"  placeholder="Property Name" name="property_name" value="{{required_property.name}}" readonly>
-                                </div>
-                            </div>
-
+                          
                                     
 
                             <div class="col-md-6 col-12">
@@ -63,11 +66,12 @@
                                 
                                 </div>
                             </div>
+ 
   
                             <div class="col-md-12 col-12 mb-1"> 
                                 <ul class="list-group">
 
-                                    {% for event in predicted_dates_data %}
+                                    {% for event in predicted_dates_data.0 %}
                                     <input class="text status_hidden_container" type="hidden" data-status_hidden_container="{{event.id}}"  name="{{event.id}}_status">
                                     
                                     <li class="list-group-item d-flex align-items-center"> 
@@ -97,7 +101,7 @@
                                         {% else %}
                                         <input class="form-check-input ai_prgram_step_status" type="checkbox" name="program_finished" id="program_finished"  >
                                         {% endif %} 
-                                        <label class="form-check-label" for="program_finished">Mark Program Finished</label>
+                                        <label class="form-check-label" for="program_finished">Mark Program Complete</label>
                                     </div>
                                 </div>
                             {% else %}
@@ -110,7 +114,7 @@
  
                             <div class="col-12">
                                 <button type="submit"
-                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save</button>
+                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Retun</button>
                                 <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
                             </div>
 

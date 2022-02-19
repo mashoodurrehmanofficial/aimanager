@@ -36,11 +36,11 @@
 
           <thead>
             <tr class=" ">
-              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox </th>
-              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">checkbox2</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1" style="width:50px">checkbox </th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1" style="width:50px">checkbox2</th>
               <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Name</th>
-              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Email</th>
-              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Mobile</th>
+              {% comment %} <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Email</th>
+              <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Mobile</th> {% endcomment %}
               <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">Property</th>
               <th class="sorting" tabindex="0" aria-controls="customer_lising_table" rowspan="1" colspan="1">AI Program </th>
             </tr>
@@ -54,14 +54,14 @@
               <td> {{customer.id}} </td> 
               <td> {{customer.id}} </td> 
               <td> <a href="/manage_customers/edit_customer/{{customer.id}}"> {{customer.name}} </a> </td>
-              <td> {{customer.email}} </td>
-              <td>  {{customer.mobile_number}} </td> 
+              {% comment %} <td> {{customer.email}} </td>
+              <td>  {{customer.mobile_number}} </td>  {% endcomment %}
               
               
               <td>
                 
                 {% if customer.property.pic %}
-                {{customer.property.pic}}
+                {{customer.property.name}}
                 {% else %}
                     <span class="badge rounded-pill badge-glow bg-secondary">+ Add Property</span>
                 {% endif %}
@@ -114,7 +114,9 @@
 
 
 
-
+<span id="total_customers_with_enrolled_programs" style="font-size: 1px;">
+  {{total_customers_with_enrolled_programs}}
+      </span>
 
 
 

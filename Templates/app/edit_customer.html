@@ -18,30 +18,29 @@
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form class="form"   method="post"> {% csrf_token %}
+                    <form class="form"   method="post" id="edit_customer_form"> {% csrf_token %}
                         <div class="row">
 
 
 
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
-                                    <label class="form-label" for="customer_id">Customer ID</label>
-                                    
-                                    {% if required_customer %} 
-                                    <input type="text" id="customer_id" class="form-control"  placeholder="Customer ID" name="customer_id" value="{{required_customer.id}}" readonly>
-                                    {% else %}
-                                    <input type="text" id="customer_id" class="form-control"  placeholder="Customer ID" name="customer_id" value="Auto Generated" readonly>
-                                        
-                                    {% endif %}
-                                        
+                                    <label class="form-label" for="property_name">Property Name</label>
+                                    <input type="text" id="property_name" class="form-control"
+                                        placeholder="Property Name" name="property_name"  value="{{required_customer.property.name}}" required>
                                 </div>
-                            </div>
+                            </div> 
+
+
+
+
+
 
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="property_pic">Property PIC</label>
                                     <input type="text" id="property_pic" class="form-control"
-                                        placeholder="Property PIC" name="property_pic"  value="{{required_customer.property.pic}}" required>
+                                        placeholder="Property PIC" name="property_pic"  value="{{required_customer.property.pic}}">
                                 </div>
                             </div> 
 
@@ -81,34 +80,27 @@
 
 
 
- 
-   
-
-                            <div class="col-md-12 col-12">
-                                <div class="mb-1">
-                                    <label class="form-label" for="property_name">Property Name</label>
-                                    <input type="text" id="property_name" class="form-control"
-                                        placeholder="Property Name" name="property_name"  value="{{required_customer.property.name}}" required>
-                                </div>
-                            </div> 
-
-
-
-
-
-
+  
  
 
                             <!-- BEGIN: Property Address Data -->
                             <div class="col-md-12 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="property_address">Property Address</label>
-                                    <textarea type="text" id="property_address" class="form-control" placeholder="Property Address" name="property_address"  rows="2"  required>{{required_customer.property_address}}</textarea>
+                                    <textarea type="text" id="property_address" class="form-control" placeholder="Property Address" name="property_address"  rows="1"  required>{{required_customer.property_address}}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="property_suburb">Property Suburb</label>
+                                    <input type="text" id="property_suburb" class="form-control"  
+                                    placeholder="Property Suburb" name="property_suburb"  value="{{required_customer.property_suburb}}"  required>
                                 </div>
                             </div>
                             
 
-                            <div class="col-md-6 mb-1">
+                            <div class="col-md-4 mb-1">
                                 <label class="form-label" for="property_state">Property State</label>
                                 <select class="select2 form-select" id="property_state" name='property_state'  required>
                                     <option value='' selected> Select Property State </option> 
@@ -129,10 +121,10 @@
 
 
 
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-4 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="property_postcode">Property Postcode</label>
-                                    <input type="text" id="property_postcode" class="form-control"  
+                                    <input type="text" id="property_postcode" class="form-control"   
                                     placeholder="Property Postcode" name="property_postcode"  value="{{required_customer.property_postcode}}"  required>
                                 </div>
                             </div>
@@ -143,12 +135,20 @@
                             <div class="col-md-12 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="billing_address">Billing Address</label>
-                                    <textarea type="text" id="billing_address" class="form-control"  placeholder="Billing Address" name="billing_address"   rows="2"  required>{{required_customer.billing_address}}</textarea>
+                                    <textarea type="text" id="billing_address" class="form-control"  placeholder="Billing Address" name="billing_address"   rows="1"  required>{{required_customer.billing_address}}</textarea>
                                 </div>
                             </div> 
 
+                            <div class="col-md-4 col-12">
+                                <div class="mb-1">
+                                    <label class="form-label" for="billing_suburb">Billing Suburb</label>
+                                    <input type="text" id="billing_suburb" class="form-control"  
+                                    placeholder="Billing Suburb" name="billing_suburb"  value="{{required_customer.billing_suburb}}"  required>
+                                </div>
+                            </div>
+                            
 
-                            <div class="col-md-6 mb-1">
+                            <div class="col-md-4 mb-1">
                                 <label class="form-label" for="billing_state">Billing State</label>
                                 <select class="select2 form-select" id="billing_state" name='billing_state' required>
                                     <option value='' selected> Select Billing State </option> 
@@ -165,10 +165,10 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-4 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="billing_postcode">Billing Postcode</label>
-                                    <input type="text" id="billing_postcode" class="form-control"
+                                    <input type="text" id="billing_postcode" class="form-control"   minlength="4" maxlength="4"
                                         placeholder="Billing Postcode" name="billing_postcode"   value="{{required_customer.billing_postcode}}" required>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@
 
                             <div class="col-12">
                                 <button type="submit"
-                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save</button>
+                                    class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Return</button>
                                 <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
                             </div>
 
@@ -245,7 +245,7 @@
                     {% if program.finished  %}
                     <span class="badge rounded-pill badge-glow bg-success">Completed</span>
                     {% else %}
-                    <span class="badge rounded-pill badge-glow bg-secondary">Going on</span>
+                    <span class="badge rounded-pill badge-glow bg-secondary">Underway</span>
                 {% endif %}
                 
                 </td>
@@ -276,7 +276,49 @@
 
 {% block 'jsblock' %}
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha256-yE5LLp5HSQ/z+hJeCqkz9hdjNkk1jaiGG0tDCraumnA=" crossorigin="anonymous"></script>
 <script>  
+    $(document).ready(function() {
+        $(":input").inputmask();
+        
+      })
+
+      $('input[name="mobile_number"]').mask('0000 000 000');
+      $('input[name="property_postcode"]').mask('0000');
+      $('input[name="billing_postcode"]').mask('0000');
+      $('input[name="customer_abn"]').mask('00 000 000 000');
+
+
+   
+      
+
+
+$('#edit_customer_form').on('submit',function(e){
+    
+    
+    var property_postcode = $('#property_postcode').val()
+    var billing_postcode = $('#billing_postcode').val() 
+    var mobile_number = $('#mobile_number').val()  
+    var customer_abn = $('#customer_abn').val()  
+    if(property_postcode.length!=4){
+        alert("Please enter a valid Property Postcode")
+        e.preventDefault() 
+    } 
+    else if(billing_postcode.length!=4){
+        alert("Please enter a valid Billing Postcode")
+        e.preventDefault() 
+    }
+    else if(mobile_number.length!=12){
+        alert("Please enter a valid Mobile Number")
+        e.preventDefault() 
+    }
+    else if(customer_abn.length!=14){
+        alert("Please enter a valid ABN")
+        e.preventDefault() 
+    }
+
+
+})
 
 </script>
 {% endblock 'jsblock' %}
