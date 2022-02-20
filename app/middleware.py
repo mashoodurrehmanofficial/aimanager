@@ -98,10 +98,10 @@ def context_processor(request):
     
      
     # Automatic marking AI Programs finished
-    required_ai_programs = AI_Program.objects.filter(start_date__lte=datetime.now().date())
-    required_ai_programs.update(finished=True) 
-    required_ai_programs = AI_Program.objects.filter(start_date__gt=datetime.now().date())
-    required_ai_programs.update(finished=False) 
+    # required_ai_programs = AI_Program.objects.filter(start_date__lte=datetime.now().date())
+    # required_ai_programs.update(finished=True) 
+    # required_ai_programs = AI_Program.objects.filter(start_date__gt=datetime.now().date())
+    # required_ai_programs.update(finished=False) 
      
     
     

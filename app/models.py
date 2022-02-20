@@ -14,7 +14,7 @@ AVAILABLE_BREED_TYPES =  tuple([(x,x) for x in AVAILABLE_BREED_TYPES])
 
 
 class CowTable(models.Model):
-    nlsid           = models.CharField(max_length=16,default='',blank=True,null=True,verbose_name="NLSID") 
+    nlsid           = models.CharField(max_length=16,default='',verbose_name="NLSID",validators=[RegexValidator(r'^\w+[A-Za-z0-9]{15}')],) 
     vid             = models.CharField(max_length=20,default='',blank=True,null=True,verbose_name="VID") 
     weight          = models.FloatField(default=0,blank=True,null=True,verbose_name="Weight") 
     condition_score = models.CharField(max_length=1,default='',blank=True,null=True, validators=[RegexValidator(r'^\d{0,9}$')],verbose_name="Condition Score")
@@ -34,7 +34,7 @@ class CowTable(models.Model):
 
 class Property(models.Model):
     name    = models.CharField(max_length=20,default='',blank=True,null=True,verbose_name="Property Name") 
-    pic     = models.CharField(max_length=20,default='',blank=True,null=True,verbose_name="PIC (Property Identofication Code)") 
+    pic     = models.CharField(max_length=8,default='',blank=True,null=True,verbose_name="PIC (Property Identofication Code)") 
     cows    = models.ManyToManyField(CowTable,blank=True)
     def __str__(self):
         return  f"{self.name} - {self.pic}"
@@ -84,24 +84,23 @@ def save_update_ai_program_dates(sender, instance, **kwargs):
 AVAILABLE_STATES =  tuple([(x,x) for x in AVAILABLE_STATES])
 
 
-
 class CustomerProfile(models.Model):
     name                = models.CharField(max_length=500,default='',blank=True,null=True)
     email               = models.CharField(max_length=500,default='',blank=True,null=True)
-    mobile_number       = models.CharField(max_length=15,default='',blank=True,null=True)
+    mobile_number       = models.CharField(max_length=15,default='',blank=True,null=True, validators=[RegexValidator(r'^\d[0-9]..\s\d[0-9].\s\d[0-9].')])
     property_address    = models.CharField(max_length=20,default='',blank=True,null=True)
     property_suburb     = models.CharField(max_length=20,default='',blank=True,null=True)
     property_state      = models.CharField(max_length=20,default='',blank=True,null=True,choices=AVAILABLE_STATES)
-    property_postcode   = models.CharField(max_length=4,default='',blank=True,null=True, validators=[RegexValidator(r'^\d{0,9}$')])
+    property_postcode   = models.CharField(max_length=4,default='', validators=[RegexValidator(r'^\d{0,9}$')])
     billing_address     = models.CharField(max_length=20,default='',blank=True,null=True)
     billing_suburb      = models.CharField(max_length=20,default='',blank=True,null=True)
     billing_state       = models.CharField(max_length=20,default='',blank=True,null=True,choices=AVAILABLE_STATES)
     billing_postcode    = models.CharField(max_length=4,default='',blank=True,null=True ,validators=[RegexValidator(r'^\d{0,9}$')])
-    abn                 = models.CharField(max_length=20,default='',blank=True,null=True)
+    abn                 = models.CharField(max_length=20,default='', validators=[RegexValidator(r'^\d[0-9]\s\d[0-9].\s\d[0-9].\s\d[0-9].')])
     property            = models.OneToOneField(Property,on_delete=models.CASCADE,blank=True,null=True)
-    ai_program          = models.ManyToManyField(AI_Program,blank=True, related_name='enrolled_programs', )
+    ai_program          = models.ManyToManyField(AI_Program,blank=True, related_name='enrolled_programs')
     
-    
+ 
     def __str__(self):
         return f"{self.name} - {self.email}"
         
