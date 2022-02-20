@@ -223,8 +223,9 @@
                 <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">checkbox </th>
                 <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">checkbox2</th>
                 <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">Start Date</th> 
-                <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">Pull Seed Out  </th> 
+                <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">Insemination  </th> 
                 <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">Pregnancy Test </th> 
+                <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">Last Action </th> 
                 <th class="sorting" tabindex="0" aria-controls="enrolled_program_listing_table" rowspan="1" colspan="1">Status</th> 
               </tr>
             </thead>
@@ -236,10 +237,12 @@
               <tr>
                 <td> {{program.id}} </td> 
                 <td> {{program.id}} </td> 
-                <td> <a href="/manage_customers/edit_customer/{{required_customer.id}}/edit_ai_program/{{program.id}}"> {{program.start_date}} </a> </td>  
-                <td> <a href="/manage_customers/edit_customer/{{required_customer.id}}/edit_ai_program/{{program.id}}"> {{program.pull_seed_out_date}} </a> </td>  
-                <td> <a href="/manage_customers/edit_customer/{{required_customer.id}}/edit_ai_program/{{program.id}}"> {{program.pregnancy_test_date}} </a> </td>  
-
+                <td> <a href="/manage_customers/edit_customer/{{required_customer.id}}/edit_ai_program/{{program.id}}"> {{program.start_date|date:"d/m/Y"}} </a> </td>  
+                <td> <a href="/manage_customers/edit_customer/{{required_customer.id}}/edit_ai_program/{{program.id}}"> {{program.insemination_date|date:"d/m/Y" }} </a> </td>  
+                <td> <a href="/manage_customers/edit_customer/{{required_customer.id}}/edit_ai_program/{{program.id}}"> {{program.pregnancy_test_date|date:"d/m/Y" }} </a> </td>  
+                
+                <td>  {{program.last_completed_action }} </td>  
+                
                 <td>
 
                     {% if program.finished  %}

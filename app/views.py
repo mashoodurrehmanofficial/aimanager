@@ -159,7 +159,7 @@ def generateAIProgramDateListing(record):
     
     data = [
         {'display_name':"CIDRS In", 'id': 'seeder','day':0, 'date': record.cidrs_in_date,'status':record.cidrs_in_status },
-        {'display_name':"PG Injection", 'id': 'bomerol','day':2, 'date': record.bomerol_injection_date,'status':record.bomerol_injection_status },
+        {'display_name':"PG Injection", 'id': 'pg_injection','day':2, 'date': record.pg_injection_date,'status':record.pg_injection_status },
         {'display_name':"Bomerol", 'id': 'bomerol', 'day':6, 'date': record.bomerol_date,'status':record.bomerol_status },
         {'display_name':"CIDRS Out", 'id': 'cidrs_out','day':8, 'date': record.cidrs_out_date,'status':record.cidrs_out_status },
         {'display_name':"Insemination", 'id': 'insemination','day':10, 'date': record.insemination_date,'status':record.insemination_status }, 
@@ -200,7 +200,7 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
         decisions = [
             proposed_start!=required_ai_program.start_date,
             required_ai_program.cidrs_in_status != seeder_status,
-            required_ai_program.bomerol_injection_status != bomerol_status,
+            required_ai_program.pg_injection_status != bomerol_status,
             required_ai_program.bomerol_status != bomerol_status,
             required_ai_program.cidrs_out_status != cidrs_out_status,
             required_ai_program.insemination_status != insemination_status, 
@@ -215,7 +215,7 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
         
         required_ai_program.start_date                  = proposed_start
         required_ai_program.cidrs_in_status             = seeder_status
-        required_ai_program.bomerol_injection_status    = bomerol_status
+        required_ai_program.pg_injection_status    = bomerol_status
         required_ai_program.bomerol_status              = bomerol_status
         required_ai_program.cidrs_out_status            = cidrs_out_status
         required_ai_program.insemination_status         = insemination_status
