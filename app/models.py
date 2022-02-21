@@ -57,7 +57,7 @@ class AI_Program(models.Model):
     cidrs_out_status          = models.BooleanField(default=False) 
     insemination_status           = models.BooleanField(default=False) 
     pregnancy_test_status         = models.BooleanField(default=False)  
-    last_completed_action  = models.CharField(max_length=8,default='N/A',blank=True,null=True,verbose_name="Last completed action")  
+    last_completed_action  = models.CharField(max_length=50,default='N/A',blank=True,null=True,verbose_name="Last completed action")  
     finished                    = models.BooleanField(default=False)
     def __str__(self):
         return  f"{self.start_date}"
