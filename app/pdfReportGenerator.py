@@ -16,7 +16,7 @@ def generatePdfReport(customer_name, customer_email, customer_property_name, cus
     if not os.path.exists(os.path.join(os.getcwd(), 'PDF Reports')):
     	os.mkdir(os.path.join(os.getcwd(), 'PDF Reports'))
 
-    pdf_file_path = os.path.join(os.getcwd(), 'PDF Reports', 'pdf report.pdf')
+    pdf_file_path = os.path.join(os.getcwd(), 'PDF Reports', f'{customer_name}.pdf')
     pdf.output(pdf_file_path)
 
 

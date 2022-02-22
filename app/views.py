@@ -191,7 +191,7 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
         program_finished        = True if request.POST['program_finished']         == 'on' else False
         seeder_status           = True if request.POST['seeder_status']         == 'on' else False
         bomerol_status           = True if request.POST['bomerol_status']         == 'on' else False
-        bomerol_status             = True if request.POST['bomerol_status']           == 'on' else False
+        pg_injection_status             = True if request.POST['pg_injection_status']           == 'on' else False
         cidrs_out_status      = True if request.POST['cidrs_out_status']    == 'on' else False
         insemination_status     = True if request.POST['insemination_status']   == 'on' else False
         insemination_status     = True if request.POST['insemination_status']   == 'on' else False
@@ -200,41 +200,39 @@ def edit_ai_program(request,ai_program_id=None,customer_id=None):
         decisions = [
             proposed_start!=required_ai_program.start_date,
             required_ai_program.cidrs_in_status != seeder_status,
-            required_ai_program.pg_injection_status != bomerol_status,
+            required_ai_program.pg_injection_status != pg_injection_status,
             required_ai_program.bomerol_status != bomerol_status,
             required_ai_program.cidrs_out_status != cidrs_out_status,
             required_ai_program.insemination_status != insemination_status, 
             required_ai_program.finished != program_finished, 
-        ]
-        
+        ] 
+        print(pg_injection_status)
         if any(decisions):
+            predicted_dates_data = generateAIProgramDateListing(AI_Program.objects.get(id=int(required_ai_program.id))) 
+            generatePdfReport( 
+                customer_name=required_customer.name,
+                customer_email=required_customer.email,
+                customer_property_name=required_customer.property.name,
+                customer_billing_address=required_customer.billing_address,
+                dates=predicted_dates_data
+            )
             print("-> Send Email")
         else:
-            print("-> Don't send email")
-         
-        
+            print("-> Don't send email") 
+            
         required_ai_program.start_date                  = proposed_start
         required_ai_program.cidrs_in_status             = seeder_status
-        required_ai_program.pg_injection_status    = bomerol_status
+        required_ai_program.pg_injection_status         = pg_injection_status
         required_ai_program.bomerol_status              = bomerol_status
         required_ai_program.cidrs_out_status            = cidrs_out_status
         required_ai_program.insemination_status         = insemination_status
         required_ai_program.pregnancy_test_status       = pregnancy_test_status
         required_ai_program.finished                    = program_finished
         
-        required_ai_program.save()
+        required_ai_program.save() 
+        required_customer.ai_program.add(required_ai_program) 
         
-        required_customer.ai_program.add(required_ai_program)
         
-        predicted_dates_data = generateAIProgramDateListing(AI_Program.objects.get(id=int(required_ai_program.id))) 
-        
-        generatePdfReport(
-            customer_name=required_customer.name,
-            customer_email=required_customer.email,
-            customer_property_name=required_customer.property.name,
-            customer_billing_address=required_customer.billing_address,
-            dates=predicted_dates_data
-        )
         
         
         return redirect(f'/manage_customers/edit_customer/{customer_id}')
